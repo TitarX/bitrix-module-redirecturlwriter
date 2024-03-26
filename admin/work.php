@@ -7,6 +7,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\IO\File;
 use DigitMind\RedirectUrlWriter\Helpers\MiscHelper;
 use DigitMind\RedirectUrlWriter\Entities\WorkTable;
+use Shuchkin\SimpleXLSX;
 
 Loc::loadMessages(__FILE__);
 Loader::includeModule('digitmind.redirecturlwriter');
@@ -95,7 +96,34 @@ if ($request->isPost()) {
 
         print json_encode($result);
 
-        exit;
+        exit();
+    } elseif ($request->get('action') === 'parsexlsx') { // Парсинг XLSX
+        $APPLICATION->RestartBuffer();
+
+        $result = [];
+
+        $phpInput = file_get_contents('php://input');
+        $phpInput = json_decode($phpInput, true);
+
+        $documentRoot = Application::getDocumentRoot();
+        $fullFilePath = $documentRoot . $phpInput['filepath'];
+        $file = new File($fullFilePath);
+        if ($file->isExists() && $file->isFile()) {
+            if ($xlsx = SimpleXLSX::parse($fullFilePath)) {
+                //
+            } else {
+                // $parseError =  SimpleXLSX::parseError();
+                // file_put_contents(__DIR__ . '/error.txt', print_r($parseError, true));
+
+                $result['result'] = 'xlsxparseerror';
+            }
+        } else {
+            $result['result'] = 'filenotfound';
+        }
+
+        print json_encode($result);
+
+        exit();
     } elseif ($request->getPost('action') === 'message') { // Системное сообщение
         $APPLICATION->RestartBuffer();
 
@@ -141,7 +169,8 @@ if (!empty($rsParamsCount)) {
 <fieldset>
     <legend><?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILE_FIELDSET_LEGEND') ?></legend>
     <input type="text" name="selected_file_path" id="selected_file_path" value="<?= $filePath ?>" size="64"
-           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly required>
+           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly
+           required>
     <button id='open_file_dialog_button'>Открыть</button>
 </fieldset>
 
