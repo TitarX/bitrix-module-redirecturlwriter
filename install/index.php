@@ -49,12 +49,6 @@ class restart_redirecturlwriter extends CModule
 
         if (!ModuleManager::isModuleInstalled('iblock')) {
             $errors = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_IBLOCK');
-        } elseif (!ModuleManager::isModuleInstalled('sale')) {
-            $errors = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_SALE');
-        } elseif (!ModuleManager::isModuleInstalled('catalog')) {
-            $errors = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_CATALOG');
-        } elseif (!ModuleManager::isModuleInstalled('currency')) {
-            $errors = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_CURRENCY');
         } else {
             $documentRoot = Application::getDocumentRoot();
             $this->copyFiles($documentRoot);
