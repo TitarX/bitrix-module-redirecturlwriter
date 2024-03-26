@@ -81,7 +81,7 @@ if ($request->isPost()) {
 
         $workResult = null;
         if (!empty($entryId)) {
-            $workResult = WorkTable::work($entryId, $arrParams);
+            $workResult = WorkTable::update($entryId, $arrParams);
         } else {
             $workResult = WorkTable::add($arrParams);
         }
