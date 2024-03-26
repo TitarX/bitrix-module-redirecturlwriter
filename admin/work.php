@@ -35,7 +35,7 @@ CAdminFileDialog::ShowScript(
         'operation' => 'O',
         'showUploadTab' => true,
         'showAddToMenuTab' => false,
-        'fileFilter' => 'csv',
+        'fileFilter' => 'xlsx',
         'allowAllFiles' => false,
         'saveConfig' => true
     ]
