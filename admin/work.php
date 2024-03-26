@@ -5,19 +5,19 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\Page\Asset;
 use Bitrix\Main\Application;
 use Bitrix\Main\IO\File;
-use Restart\RedirectUrlWriter\Helpers\MiscHelper;
-use Restart\RedirectUrlWriter\Entities\WorkTable;
+use DigitMind\RedirectUrlWriter\Helpers\MiscHelper;
+use DigitMind\RedirectUrlWriter\Entities\WorkTable;
 
 Loc::loadMessages(__FILE__);
-Loader::includeModule('restart.redirecturlwriter');
+Loader::includeModule('digitmind.redirecturlwriter');
 
 @set_time_limit(360);
 
 global $APPLICATION;
-$APPLICATION->SetTitle(Loc::getMessage('RESTART_REDIRECTURLWRITER_WORK_PAGE_TITLE'));
+$APPLICATION->SetTitle(Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_PAGE_TITLE'));
 
-Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/restart_redirecturlwriter_main.js');
-Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/restart_redirecturlwriter_work.js');
+Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_main.js');
+Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_work.js');
 
 $request = Application::getInstance()->getContext()->getRequest();
 
@@ -70,7 +70,7 @@ if ($request->isPost()) {
 
         $entryId = 0;
         if ($rsParamsCount !== 1) {
-            WorkTable::getEntity()->getConnection()->queryExecute('TRUNCATE TABLE restart_redirecturlwriter_work');
+            WorkTable::getEntity()->getConnection()->queryExecute('TRUNCATE TABLE digitmind_redirecturlwriter_work');
         } elseif (!empty($phpInput['entryid']) && is_numeric($phpInput['entryid'])) {
             $entryId = $phpInput['entryid'];
         }
@@ -139,9 +139,9 @@ if (!empty($rsParamsCount)) {
 <div id="work-info"></div>
 
 <fieldset>
-    <legend><?= Loc::getMessage('RESTART_REDIRECTURLWRITER_WORK_FILE_FIELDSET_LEGEND') ?></legend>
+    <legend><?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILE_FIELDSET_LEGEND') ?></legend>
     <input type="text" name="selected_file_path" id="selected_file_path" value="<?= $filePath ?>" size="64"
-           placeholder="<?= Loc::getMessage('RESTART_REDIRECTURLWRITER_WORK_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly required>
+           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly required>
     <button id='open_file_dialog_button'>Открыть</button>
 </fieldset>
 
@@ -151,5 +151,5 @@ if (!empty($rsParamsCount)) {
 <br>
 
 <button id="start-work-button">
-    <?= Loc::getMessage('RESTART_REDIRECTURLWRITER_WORK_FILE_START_BUTTON') ?>
+    <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILE_START_BUTTON') ?>
 </button>

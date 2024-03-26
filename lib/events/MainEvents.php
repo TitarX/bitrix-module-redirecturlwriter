@@ -1,10 +1,10 @@
 <?php
 
-namespace Restart\RedirectUrlWriter\Events;
+namespace DigitMind\RedirectUrlWriter\Events;
 
 use Bitrix\Main\Loader;
 
-Loader::includeModule('restart.redirecturlwriter');
+Loader::includeModule('digitmind.redirecturlwriter');
 
 class MainEvents
 {

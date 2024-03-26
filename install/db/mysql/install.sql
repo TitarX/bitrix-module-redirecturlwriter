@@ -1,4 +1,4 @@
-create table if not exists restart_redirecturlwriter_work
+create table if not exists digitmind_redirecturlwriter_work
 (
     ID int not null auto_increment,
     VALUE text not null default '',

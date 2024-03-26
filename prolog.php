@@ -1,3 +1,3 @@
 <?php
 
-define('ADMIN_MODULE_NAME', 'restart.redirecturlwriter');
+define('ADMIN_MODULE_NAME', 'digitmind.redirecturlwriter');

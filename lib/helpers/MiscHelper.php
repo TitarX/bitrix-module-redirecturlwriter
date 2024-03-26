@@ -1,12 +1,12 @@
 <?php
 
-namespace Restart\RedirectUrlWriter\Helpers;
+namespace DigitMind\RedirectUrlWriter\Helpers;
 
 class MiscHelper
 {
     public static function getModuleId()
     {
-        return 'restart.redirecturlwriter';
+        return 'digitmind.redirecturlwriter';
     }
 
     public static function getAssetsPath($type)

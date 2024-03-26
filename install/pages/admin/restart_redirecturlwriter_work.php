@@ -4,7 +4,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_ad
 
 use Bitrix\Main\Loader;
 
-$includeFilePath = Loader::getLocal('modules/restart.redirecturlwriter/admin/work.php');
+$includeFilePath = Loader::getLocal('modules/digitmind.redirecturlwriter/admin/work.php');
 if ($includeFilePath !== false) {
     require_once $includeFilePath;
 }

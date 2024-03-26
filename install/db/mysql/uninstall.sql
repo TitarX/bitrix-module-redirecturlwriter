@@ -1,1 +1,1 @@
-drop table if exists restart_redirecturlwriter_work;
+drop table if exists digitmind_redirecturlwriter_work;

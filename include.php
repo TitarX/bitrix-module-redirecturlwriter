@@ -4,9 +4,9 @@ use Bitrix\Main\Loader;
 
 // При правильном именовании, классы подключаются автоматически. Имена файлов классов должны быть в нижнем регистре.
 Loader::registerAutoloadClasses(
-    'restart.redirecturlwriter',
+    'digitmind.redirecturlwriter',
     [
-        'Restart\RedirectUrlWriter\Events\MainEvents' => 'lib/events/MainEvents.php',
-        'Restart\RedirectUrlWriter\Helpers\MiscHelper' => 'lib/helpers/MiscHelper.php'
+        'DigitMind\RedirectUrlWriter\Events\MainEvents' => 'lib/events/MainEvents.php',
+        'DigitMind\RedirectUrlWriter\Helpers\MiscHelper' => 'lib/helpers/MiscHelper.php'
     ]
 );

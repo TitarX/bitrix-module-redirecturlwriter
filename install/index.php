@@ -9,15 +9,15 @@ use Bitrix\Main\IO\Directory;
 
 Loc::loadMessages(__FILE__);
 
-class restart_redirecturlwriter extends CModule
+class digitmind_redirecturlwriter extends CModule
 {
     var $exclusionAdminFiles;
 
     function __construct()
     {
-        $this->MODULE_ID = 'restart.redirecturlwriter';
-        $this->MODULE_NAME = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NAME');
-        $this->MODULE_DESCRIPTION = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_DESCRIPTION');
+        $this->MODULE_ID = 'digitmind.redirecturlwriter';
+        $this->MODULE_NAME = Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_MODULE_NAME');
+        $this->MODULE_DESCRIPTION = Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_MODULE_DESCRIPTION');
 
         $this->PARTNER_NAME = '';
         $this->PARTNER_URI = '';
@@ -48,7 +48,7 @@ class restart_redirecturlwriter extends CModule
         $errors = '';
 
         if (!ModuleManager::isModuleInstalled('iblock')) {
-            $errors = Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_IBLOCK');
+            $errors = Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_MODULE_NOT_INSTALLED_IBLOCK');
         } else {
             $documentRoot = Application::getDocumentRoot();
             $this->copyFiles($documentRoot);
@@ -61,7 +61,7 @@ class restart_redirecturlwriter extends CModule
         }
 
         $APPLICATION->IncludeAdminFile(
-            Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_INSTALL'),
+            Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_MODULE_INSTALL'),
             __DIR__ . '/step.php'
         );
     }
@@ -82,7 +82,7 @@ class restart_redirecturlwriter extends CModule
         ModuleManager::unRegisterModule($this->MODULE_ID);
 
         $APPLICATION->IncludeAdminFile(
-            Loc::getMessage('RESTART_REDIRECTURLWRITER_MODULE_UNINSTALL'),
+            Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_MODULE_UNINSTALL'),
             __DIR__ . '/unstep.php'
         );
     }
@@ -111,7 +111,7 @@ class restart_redirecturlwriter extends CModule
 
         $documentRoot = Application::getDocumentRoot();
         $errors = $DB->RunSQLBatch(
-            "{$documentRoot}/bitrix/modules/restart.redirecturlwriter/install/db/" . strtolower($DB->type) . '/install.sql'
+            "{$documentRoot}/bitrix/modules/digitmind.redirecturlwriter/install/db/" . strtolower($DB->type) . '/install.sql'
         );
         if (!empty($errors)) {
             $APPLICATION->ThrowException(implode('. ', $errors));
@@ -129,7 +129,7 @@ class restart_redirecturlwriter extends CModule
 
         $documentRoot = Application::getDocumentRoot();
         $errors = $DB->RunSQLBatch(
-            "{$documentRoot}/bitrix/modules/restart.redirecturlwriter/install/db/" . strtolower($DB->type) . '/uninstall.sql'
+            "{$documentRoot}/bitrix/modules/digitmind.redirecturlwriter/install/db/" . strtolower($DB->type) . '/uninstall.sql'
         );
         if (!empty($errors)) {
             $APPLICATION->ThrowException(implode('. ', $errors));
@@ -142,8 +142,8 @@ class restart_redirecturlwriter extends CModule
     private function copyFiles($documentRoot)
     {
         CopyDirFiles(
-            __DIR__ . '/pages/admin/restart_redirecturlwriter_work.php',
-            "{$documentRoot}/bitrix/admin/restart_redirecturlwriter_work.php",
+            __DIR__ . '/pages/admin/digitmind_redirecturlwriter_work.php',
+            "{$documentRoot}/bitrix/admin/digitmind_redirecturlwriter_work.php",
             true,
             true,
             false
@@ -156,7 +156,7 @@ class restart_redirecturlwriter extends CModule
 
     private function deleteFiles()
     {
-        DeleteDirFilesEx('/bitrix/admin/restart_redirecturlwriter_work.php');
+        DeleteDirFilesEx('/bitrix/admin/digitmind_redirecturlwriter_work.php');
 
         DeleteDirFilesEx("/bitrix/js/{$this->MODULE_ID}");
         DeleteDirFilesEx("/bitrix/css/{$this->MODULE_ID}");
@@ -167,12 +167,12 @@ class restart_redirecturlwriter extends CModule
     {
         $uploadDirectoryName = Option::get('main', 'upload_dir');
 
-        $restartDirectoryPath = "{$documentRoot}/{$uploadDirectoryName}/restart";
-        if (!Directory::isDirectoryExists($restartDirectoryPath)) {
-            Directory::createDirectory($restartDirectoryPath);
+        $digitmindDirectoryPath = "{$documentRoot}/{$uploadDirectoryName}/digitmind";
+        if (!Directory::isDirectoryExists($digitmindDirectoryPath)) {
+            Directory::createDirectory($digitmindDirectoryPath);
         }
 
-        $redirecturlwriterDirectoryPath = "{$restartDirectoryPath}/redirecturlwriter";
+        $redirecturlwriterDirectoryPath = "{$digitmindDirectoryPath}/redirecturlwriter";
         if (!Directory::isDirectoryExists($redirecturlwriterDirectoryPath)) {
             Directory::createDirectory($redirecturlwriterDirectoryPath);
         }
@@ -181,7 +181,7 @@ class restart_redirecturlwriter extends CModule
     private function deleteDirectories()
     {
         $uploadDirectoryPath = Option::get('main', 'upload_dir');
-        DeleteDirFilesEx("/{$uploadDirectoryPath}/restart/redirecturlwriter");
+        DeleteDirFilesEx("/{$uploadDirectoryPath}/digitmind/redirecturlwriter");
     }
 
     function RegisterEvents()
@@ -190,7 +190,7 @@ class restart_redirecturlwriter extends CModule
             'main',
             'OnEpilog',
             $this->MODULE_ID,
-            'Restart\RedirectUrlWriter\Events\MainEvents',
+            'DigitMind\RedirectUrlWriter\Events\MainEvents',
             'EpilogHandler',
             1000
         );
@@ -202,7 +202,7 @@ class restart_redirecturlwriter extends CModule
             'main',
             'OnEpilog',
             $this->MODULE_ID,
-            'Restart\RedirectUrlWriter\Events\MainEvents',
+            'DigitMind\RedirectUrlWriter\Events\MainEvents',
             'EpilogHandler'
         );
     }
@@ -212,7 +212,7 @@ class restart_redirecturlwriter extends CModule
         return [
             "reference_id" => ['D'],
             "reference" => [
-                '[D] ' . Loc::getMessage('RESTART_REDIRECTURLWRITER_RIGHT_DENIED')
+                '[D] ' . Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_RIGHT_DENIED')
             ]
         ];
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Restart\RedirectUrlWriter\Entities;
+namespace DigitMind\RedirectUrlWriter\Entities;
 
 use Bitrix\Main\Entity;
 use Bitrix\Main\SystemException;
@@ -17,7 +17,7 @@ class WorkTable extends Entity\DataManager
      */
     public static function getTableName()
     {
-        return 'restart_redirecturlwriter_work';
+        return 'digitmind_redirecturlwriter_work';
     }
 
     /**
