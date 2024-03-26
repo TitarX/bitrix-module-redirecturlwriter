@@ -7,6 +7,7 @@ Loader::registerAutoloadClasses(
     'digitmind.redirecturlwriter',
     [
         'DigitMind\RedirectUrlWriter\Events\MainEvents' => 'lib/events/MainEvents.php',
-        'DigitMind\RedirectUrlWriter\Helpers\MiscHelper' => 'lib/helpers/MiscHelper.php'
+        'DigitMind\RedirectUrlWriter\Helpers\MiscHelper' => 'lib/helpers/MiscHelper.php',
+        'Shuchkin\SimpleXLSX' => 'lib/simplexslx/SimpleXLSX.php'
     ]
 );
