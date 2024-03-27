@@ -19,8 +19,11 @@ Loader::includeModule('digitmind.redirecturlwriter');
 global $APPLICATION;
 $APPLICATION->SetTitle(Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_TITLE'));
 
-Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_main.js');
-Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_xlsxparse.js');
+$mainCss = MiscHelper::getAssetsPath('css') . '/main.css';
+Asset::getInstance()->addString('<link href="' . $mainCss . '" rel="stylesheet" type="text/css">');
+
+Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/main.js');
+Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/xlsxparse.js');
 
 $request = Application::getInstance()->getContext()->getRequest();
 
@@ -73,14 +76,16 @@ if ($request->isPost()) {
 
         $entryId = 0;
         if ($rsParamsCount !== 1) {
-            OptionsTable::getEntity()->getConnection()->queryExecute('TRUNCATE TABLE digitmind_redirecturlwriter_options');
+            OptionsTable::getEntity()->getConnection()->queryExecute(
+                'TRUNCATE TABLE digitmind_redirecturlwriter_options'
+            );
         } elseif (!empty($phpInput['entryid']) && is_numeric($phpInput['entryid'])) {
             $entryId = $phpInput['entryid'];
         }
 
         $arrParams = [
-                'CODE' => OPT_NAME_XLSX_FILE_PATH,
-                'VALUE' => $phpInput
+            'CODE' => OPT_NAME_XLSX_FILE_PATH,
+            'VALUE' => $phpInput
         ];
 
         try {
@@ -171,21 +176,27 @@ if (!empty($rsParamsCount)) {
 }
 ?>
 
-<div id="work-info"></div>
+<div class="wrapper">
+    <div id="work-info"></div>
+</div>
 
-<fieldset>
-    <legend><?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_FIELDSET_LEGEND') ?></legend>
+<div class="wrapper">
+    <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_DESCRIPTION') ?>
+</div>
+
+<div class="wrapper">
     <input type="text" name="selected_file_path" id="selected_file_path" value="<?= $filePath ?>" size="64"
-           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly
+           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILEPATH_PLACEHOLDER_TITLE') ?>"
+           readonly
            required>
     <button id='open_file_dialog_button'>Открыть</button>
-</fieldset>
+</div>
 
 <input type="hidden" name="requested-page" id="requested-page" value="<?= $request->getRequestedPage() ?>">
 <input type="hidden" name="params-entry-id" id="params-entry-id" value="<?= $entryId ?>">
 
-<br>
-
-<button id="start-work-button">
-    <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_START_BUTTON') ?>
-</button>
+<div class="wrapper">
+    <button id="start-work-button">
+        <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_START_BUTTON') ?>
+    </button>
+</div>

@@ -1,6 +1,4 @@
 <?php
-
-$MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_TITLE'] = 'Парсинг XLSX-файла с выгрузкой поискового индекса';
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILEPATH_PLACEHOLDER_TITLE'] = 'Путь к XLSX-файлу';
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_FIELDSET_LEGEND'] = 'XLSX-файл';
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_START_BUTTON'] = 'Старт';
@@ -8,3 +6,6 @@ $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_MISS'] = 'Не указан XL
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARAMS_ERROR'] = 'Не удалось сохранить параметры.';
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARSEXLSX_ERROR'] = 'Произошла ошибка во время парсинга XLSX.';
 $MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_XLSXNOTFOUND_ERROR'] = 'XLSX файл не найден.';
+
+$MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_TITLE'] = 'Парсинг XLSX-файла с выгрузкой поискового индекса';
+$MESS['DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_DESCRIPTION'] = 'Функционал данной страницы выполняет парсинг указанного XLSX-файла на определение старых URL каталога с заполнением ими свойства "Старый URL" элементов и разделов инфоблока каталога.';
