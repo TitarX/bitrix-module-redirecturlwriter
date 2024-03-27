@@ -142,8 +142,8 @@ class digitmind_redirecturlwriter extends CModule
     private function copyFiles($documentRoot)
     {
         CopyDirFiles(
-            __DIR__ . '/pages/admin/digitmind_redirecturlwriter_work.php',
-            "{$documentRoot}/bitrix/admin/digitmind_redirecturlwriter_work.php",
+            __DIR__ . '/pages/admin/digitmind_redirecturlwriter_xlsxparse.php',
+            "{$documentRoot}/bitrix/admin/digitmind_redirecturlwriter_xlsxparse.php",
             true,
             true,
             false
@@ -156,7 +156,7 @@ class digitmind_redirecturlwriter extends CModule
 
     private function deleteFiles()
     {
-        DeleteDirFilesEx('/bitrix/admin/digitmind_redirecturlwriter_work.php');
+        DeleteDirFilesEx('/bitrix/admin/digitmind_redirecturlwriter_xlsxparse.php');
 
         DeleteDirFilesEx("/bitrix/js/{$this->MODULE_ID}");
         DeleteDirFilesEx("/bitrix/css/{$this->MODULE_ID}");

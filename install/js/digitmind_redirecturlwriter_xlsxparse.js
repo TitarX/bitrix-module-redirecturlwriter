@@ -31,7 +31,7 @@ function prepareUpdate(url) {
             if (data.result && data.result === 'yes') {
                 saveParams(url, params);
             } else {
-                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_WORK_FILE_MISS', {}, 'work-info');
+                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_MISS', {}, 'work-info');
             }
         }
     ).catch(
@@ -62,7 +62,7 @@ function saveParams(url, params) {
     ).then(
         (data) => {
             if (data.result === 'fail') {
-                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_WORK_PARAMS_ERROR', {}, 'work-info');
+                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARAMS_ERROR', {}, 'work-info');
             } else {
                 const entryId = data.result;
                 document.getElementById('params-entry-id').value = entryId;

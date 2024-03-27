@@ -5,7 +5,7 @@ namespace DigitMind\RedirectUrlWriter\Entities;
 use Bitrix\Main\Entity;
 use Bitrix\Main\SystemException;
 
-class WorkTable extends Entity\DataManager
+class OptionsTable extends Entity\DataManager
 {
     /**
      * Метод возвращает имя таблицы
@@ -15,9 +15,9 @@ class WorkTable extends Entity\DataManager
      *
      * @return string Имя таблицы
      */
-    public static function getTableName()
+    public static function getTableName(): string
     {
-        return 'digitmind_redirecturlwriter_work';
+        return 'digitmind_redirecturlwriter_options';
     }
 
     /**
@@ -29,20 +29,27 @@ class WorkTable extends Entity\DataManager
      * @return array Массив объектов, описывающих поля таблицы в базе данных
      * @throws SystemException
      */
-    public static function getMap()
+    public static function getMap(): array
     {
         return [
             new Entity\IntegerField(
                 'ID',
                 [
                     'primary' => true,
-                    'autocomplete' => true,
+                    'autocomplete' => true
+                ]
+            ),
+            new Entity\TextField(
+                'CODE',
+                [
+                    'required' => true
                 ]
             ),
             new Entity\TextField(
                 'VALUE',
                 [
-                    'default_value' => '',
+                    'serialized' => true,
+                    'required' => true
                 ]
             )
         ];

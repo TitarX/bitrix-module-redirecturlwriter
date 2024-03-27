@@ -6,8 +6,10 @@ use Bitrix\Main\Page\Asset;
 use Bitrix\Main\Application;
 use Bitrix\Main\IO\File;
 use DigitMind\RedirectUrlWriter\Helpers\MiscHelper;
-use DigitMind\RedirectUrlWriter\Entities\WorkTable;
+use DigitMind\RedirectUrlWriter\Entities\OptionsTable;
 use Shuchkin\SimpleXLSX;
+
+define('OPT_NAME_XLSX_FILE_PATH', 'XLSX_FILE_PATH');
 
 Loc::loadMessages(__FILE__);
 Loader::includeModule('digitmind.redirecturlwriter');
@@ -15,14 +17,14 @@ Loader::includeModule('digitmind.redirecturlwriter');
 @set_time_limit(360);
 
 global $APPLICATION;
-$APPLICATION->SetTitle(Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_PAGE_TITLE'));
+$APPLICATION->SetTitle(Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_TITLE'));
 
 Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_main.js');
-Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_work.js');
+Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/digitmind_redirecturlwriter_xlsxparse.js');
 
 $request = Application::getInstance()->getContext()->getRequest();
 
-$rsParamsCount = WorkTable::getCount();
+$rsParamsCount = OptionsTable::getCount();
 if (empty($rsParamsCount) || !is_int($rsParamsCount)) {
     $rsParamsCount = 0;
 }
@@ -71,27 +73,32 @@ if ($request->isPost()) {
 
         $entryId = 0;
         if ($rsParamsCount !== 1) {
-            WorkTable::getEntity()->getConnection()->queryExecute('TRUNCATE TABLE digitmind_redirecturlwriter_work');
+            OptionsTable::getEntity()->getConnection()->queryExecute('TRUNCATE TABLE digitmind_redirecturlwriter_options');
         } elseif (!empty($phpInput['entryid']) && is_numeric($phpInput['entryid'])) {
             $entryId = $phpInput['entryid'];
         }
 
-        $phpInput = serialize($phpInput);
+        $arrParams = [
+                'CODE' => OPT_NAME_XLSX_FILE_PATH,
+                'VALUE' => $phpInput
+        ];
 
-        $arrParams = ['VALUE' => $phpInput];
-
-        $workResult = null;
-        if (!empty($entryId)) {
-            $workResult = WorkTable::update($entryId, $arrParams);
-        } else {
-            $workResult = WorkTable::add($arrParams);
-        }
-        $result = [];
-        if (isset($workResult) && $workResult->isSuccess()) {
-            $entryId = $workResult->getId();
-            $result['result'] = $entryId;
-        } else {
-            $result['result'] = 'fail';
+        try {
+            $workResult = null;
+            if (!empty($entryId)) {
+                $workResult = OptionsTable::update($entryId, $arrParams);
+            } else {
+                $workResult = OptionsTable::add($arrParams);
+            }
+            $result = [];
+            if (isset($workResult) && $workResult->isSuccess()) {
+                $entryId = $workResult->getId();
+                $result['result'] = $entryId;
+            } else {
+                $result['result'] = 'fail';
+            }
+        } catch (Exception $ex) {
+            file_put_contents(__DIR__ . '/exceptions.txt', print_r($ex, true));
         }
 
         print json_encode($result);
@@ -144,17 +151,17 @@ if ($request->isPost()) {
 $entryId = '';
 $filePath = '';
 if (!empty($rsParamsCount)) {
-    $dbResult = WorkTable::getList(
+    $dbResult = OptionsTable::getList(
         [
             'select' => ['ID', 'VALUE'],
             'order' => ['ID' => 'desc'],
-            'limit' => 1
+            'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH]
         ]
     );
     if ($arrResult = $dbResult->fetch()) {
         $entryId = $arrResult['ID'];
 
-        $arrParams = unserialize($arrResult['VALUE']);
+        $arrParams = $arrResult['VALUE'];
         if (!empty($arrParams)) {
             if (!empty($arrParams['filepath'])) {
                 $filePath = $arrParams['filepath'];
@@ -167,9 +174,9 @@ if (!empty($rsParamsCount)) {
 <div id="work-info"></div>
 
 <fieldset>
-    <legend><?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILE_FIELDSET_LEGEND') ?></legend>
+    <legend><?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_FIELDSET_LEGEND') ?></legend>
     <input type="text" name="selected_file_path" id="selected_file_path" value="<?= $filePath ?>" size="64"
-           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly
+           placeholder="<?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILEPATH_PLACEHOLDER_TITLE') ?>" readonly
            required>
     <button id='open_file_dialog_button'>Открыть</button>
 </fieldset>
@@ -180,5 +187,5 @@ if (!empty($rsParamsCount)) {
 <br>
 
 <button id="start-work-button">
-    <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_WORK_FILE_START_BUTTON') ?>
+    <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_START_BUTTON') ?>
 </button>

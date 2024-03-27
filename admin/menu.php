@@ -17,7 +17,7 @@ $arAdminMenu = [
         [
             'text' => Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_SUBMENU_TEXT'),
             'title' => Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_SUBMENU_TITLE'),
-            'url' => 'digitmind_redirecturlwriter_work.php?lang=' . LANGUAGE_ID,
+            'url' => 'digitmind_redirecturlwriter_xlsxparse.php?lang=' . LANGUAGE_ID,
             'icon' => ''
         ]
     ]

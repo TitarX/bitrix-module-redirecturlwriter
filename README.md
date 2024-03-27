@@ -19,13 +19,13 @@ PERFCODE_BLANKD7\
 DIGITMIND_REDIRECTURLWRITER
 
 ParamsTable\
-WorkTable
+OptionsTable
 
 digitmind_redirecturlwriter_params\
-digitmind_redirecturlwriter_work
+digitmind_redirecturlwriter_options
 
 params\
-work
+options
 
 update\
 !::update\
