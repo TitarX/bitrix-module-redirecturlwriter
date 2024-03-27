@@ -49,7 +49,7 @@ class OptionsTable extends Entity\DataManager
                 'VALUE',
                 [
                     'serialized' => true,
-                    'required' => true
+                    'default_value' => ''
                 ]
             )
         ];
