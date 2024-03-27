@@ -6,11 +6,12 @@ window.addEventListener('load', function () {
     document.getElementById('start-work-button').addEventListener('click', function () {
         BX.adjust(BX('work-info'), {html: ''});
         const requestedPage = document.getElementById('requested-page').value.trim();
-        prepareUpdate(requestedPage);
+        const waitSpinner = BX.showWait('work-info-spinner');
+        prepareWork(requestedPage, waitSpinner);
     });
 });
 
-function prepareUpdate(url) {
+function prepareWork(url, waitSpinner) {
     const filepath = document.getElementById('selected_file_path').value.trim();
 
     const params = {
@@ -29,27 +30,21 @@ function prepareUpdate(url) {
     ).then(
         (data) => {
             if (data.result && data.result === 'yes') {
-                saveParams(url, params);
+                saveParams(url, params, waitSpinner);
             } else {
                 showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_MISS', {}, 'work-info');
+                BX.closeWait('work-info-spinner', waitSpinner);
             }
         }
     ).catch(
         (error) => {
             // console.error(error);
+            BX.closeWait('work-info-spinner', waitSpinner);
         }
     );
 }
 
-function saveParams(url, params) {
-    let entryId = document.getElementById('params-entry-id').value.trim();
-    entryId = parseInt(entryId);
-    if (Number.isNaN(entryId)) {
-        params.entryid = 0;
-    } else {
-        params.entryid = entryId;
-    }
-
+function saveParams(url, params, waitSpinner) {
     fetch(`${url}?action=saveparams`, {
         method: 'POST',
         headers: {
@@ -63,14 +58,15 @@ function saveParams(url, params) {
         (data) => {
             if (data.result === 'fail') {
                 showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARAMS_ERROR', {}, 'work-info');
+                BX.closeWait('work-info-spinner', waitSpinner);
             } else {
-                const entryId = data.result;
-                document.getElementById('params-entry-id').value = entryId;
+                //
             }
         }
     ).catch(
         (error) => {
             // console.error(error);
+            BX.closeWait('work-info-spinner', waitSpinner);
         }
     );
 }

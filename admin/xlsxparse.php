@@ -27,11 +27,6 @@ Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/xlsxparse.js');
 
 $request = Application::getInstance()->getContext()->getRequest();
 
-$rsParamsCount = OptionsTable::getCount();
-if (empty($rsParamsCount) || !is_int($rsParamsCount)) {
-    $rsParamsCount = 0;
-}
-
 CAdminFileDialog::ShowScript(
     [
         'event' => 'OpenFileDialog',
@@ -74,21 +69,23 @@ if ($request->isPost()) {
         $phpInput = file_get_contents('php://input');
         $phpInput = json_decode($phpInput, true);
 
-        $entryId = 0;
-        if ($rsParamsCount !== 1) {
-            OptionsTable::getEntity()->getConnection()->queryExecute(
-                'TRUNCATE TABLE digitmind_redirecturlwriter_options'
-            );
-        } elseif (!empty($phpInput['entryid']) && is_numeric($phpInput['entryid'])) {
-            $entryId = $phpInput['entryid'];
-        }
+        $result['result'] = 'fail';
+        if (!empty($phpInput['filepath'])) {
+            $arrParams = [
+                'CODE' => OPT_NAME_XLSX_FILE_PATH,
+                'VALUE' => $phpInput['filepath']
+            ];
 
-        $arrParams = [
-            'CODE' => OPT_NAME_XLSX_FILE_PATH,
-            'VALUE' => $phpInput
-        ];
+            $entryId = 0;
+            $dbResult = OptionsTable::getList([
+                'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH],
+                'select' => ['ID'],
+                'limit' => 1
+            ]);
+            if ($arrResult = $dbResult->fetch()) {
+                $entryId = $arrResult['ID'];
+            }
 
-        try {
             $workResult = null;
             if (!empty($entryId)) {
                 $workResult = OptionsTable::update($entryId, $arrParams);
@@ -97,13 +94,8 @@ if ($request->isPost()) {
             }
             $result = [];
             if (isset($workResult) && $workResult->isSuccess()) {
-                $entryId = $workResult->getId();
-                $result['result'] = $entryId;
-            } else {
-                $result['result'] = 'fail';
+                $result['result'] = $workResult->getId();
             }
-        } catch (Exception $ex) {
-            file_put_contents(__DIR__ . '/exceptions.txt', print_r($ex, true));
         }
 
         print json_encode($result);
@@ -153,32 +145,20 @@ if ($request->isPost()) {
     }
 }
 
-$entryId = '';
 $filePath = '';
-if (!empty($rsParamsCount)) {
-    $dbResult = OptionsTable::getList(
-        [
-            'select' => ['ID', 'VALUE'],
-            'order' => ['ID' => 'desc'],
-            'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH]
-        ]
-    );
-    if ($arrResult = $dbResult->fetch()) {
-        $entryId = $arrResult['ID'];
-
-        $arrParams = $arrResult['VALUE'];
-        if (!empty($arrParams)) {
-            if (!empty($arrParams['filepath'])) {
-                $filePath = $arrParams['filepath'];
-            }
-        }
+$dbResult = OptionsTable::getList(
+    [
+        'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH],
+        'select' => ['VALUE'],
+        'limit' => 1
+    ]
+);
+if ($arrResult = $dbResult->fetch()) {
+    if (!empty($arrResult['VALUE'])) {
+        $filePath = $arrResult['VALUE'];
     }
 }
 ?>
-
-<div class="wrapper">
-    <div id="work-info"></div>
-</div>
 
 <div class="wrapper">
     <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_DESCRIPTION') ?>
@@ -193,10 +173,14 @@ if (!empty($rsParamsCount)) {
 </div>
 
 <input type="hidden" name="requested-page" id="requested-page" value="<?= $request->getRequestedPage() ?>">
-<input type="hidden" name="params-entry-id" id="params-entry-id" value="<?= $entryId ?>">
 
 <div class="wrapper">
+    <div id="work-info-spinner"></div>
     <button id="start-work-button">
         <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_FILE_START_BUTTON') ?>
     </button>
+</div>
+
+<div class="wrapper">
+    <div id="work-info"></div>
 </div>
