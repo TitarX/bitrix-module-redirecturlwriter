@@ -93,7 +93,25 @@ function parseXlsx(url, params, waitSpinner) {
                 showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_WRITEOLDURLSERROR_ERROR', {}, 'work-info');
                 BX.closeWait('work-info-spinner', waitSpinner);
             } else {
-                //
+                showMessage(url, 'OK', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SUCCESS', {}, 'work-info');
+
+                // let temp = '<div>' + '<a href="' + data.result.free_sections_urls_path + '" download>'
+                //     + BX.message('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE')
+                //     + '</a></div>';
+                // console.log(temp);
+
+                if (data.result.free_products_urls_file_path) {
+                    jQuery('<div>' + '<a href="' + data.result.free_products_urls_file_path + '" download>'
+                        + BX.message('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PROD_URLS_FILE')
+                        + '</a></div>').appendTo(jQuery('#work-info'));
+                }
+                if (data.result.free_sections_urls_path) {
+                    jQuery('<div>' + '<a href="' + data.result.free_sections_urls_path + '" download>'
+                        + BX.message('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE')
+                        + '</a></div>').appendTo(jQuery('#work-info'));
+                }
+
+                BX.closeWait('work-info-spinner', waitSpinner);
             }
         }
     ).catch(

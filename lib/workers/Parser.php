@@ -2,6 +2,7 @@
 
 namespace DigitMind\RedirectUrlWriter\Workers;
 
+use Bitrix\Main\Application;
 use Bitrix\Main\Loader;
 use DigitMind\RedirectUrlWriter\Helpers\MiscHelper;
 use Shuchkin\SimpleXLSX;
@@ -21,7 +22,7 @@ class Parser
         if (is_array($parseXlsxResult)) {
             $writeOldUrlsResult = self::writeOldUrls($parseXlsxResult);
             if (is_array($writeOldUrlsResult)) {
-                //
+                $result = $writeOldUrlsResult;
             } else {
                 $result = 'writeoldurlserror';
             }
@@ -68,6 +69,10 @@ class Parser
         global $USER_FIELD_MANAGER;
 
         $result = false;
+        $documentRoot = Application::getDocumentRoot();
+        $moduleUploadDir = MiscHelper::getModuleUploadDirPath();
+        $freeProductsUrlsFilePath = "{$moduleUploadDir}/free_products_urls.txt";
+        $freeSectionsUrlsFilePath = "{$moduleUploadDir}/free_sections_urls.txt";
 
         if (Loader::includeModule('iblock')) {
             $productKeys = array_keys($oldUrls['products']);
@@ -92,6 +97,10 @@ class Parser
 
                 unset($oldUrls['products'][$arrResult['ID']]);
             }
+            file_put_contents(
+                "{$documentRoot}{$freeProductsUrlsFilePath}",
+                implode(PHP_EOL, $oldUrls['products'])
+            );
 
             $sectionKeys = array_keys($oldUrls['sections']);
             $dbResult = \CIBlockSection::GetList(
@@ -113,6 +122,15 @@ class Parser
 
                 unset($oldUrls['sections'][$arrResult['ID']]);
             }
+            file_put_contents(
+                "{$documentRoot}{$freeSectionsUrlsFilePath}",
+                implode(PHP_EOL, $oldUrls['sections'])
+            );
+
+            $result = [
+                'free_products_urls_file_path' => $freeProductsUrlsFilePath,
+                'free_sections_urls_path' => $freeSectionsUrlsFilePath
+            ];
         }
 
         return $result;

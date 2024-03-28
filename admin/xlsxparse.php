@@ -113,12 +113,7 @@ if ($request->isPost()) {
         $fullFilePath = $documentRoot . $phpInput['filepath'];
         $file = new File($fullFilePath);
         if ($file->isExists() && $file->isFile()) {
-            $parseResult = Parser::parseXlsxAndWriteUrls($fullFilePath);
-            if (is_array($parseResult)) {
-                //
-            } elseif (is_string($parseResult)) {
-                $result['result'] = $parseResult;
-            }
+            $result['result'] = Parser::parseXlsxAndWriteUrls($fullFilePath);
         } else {
             $result['result'] = 'filenotfound';
         }

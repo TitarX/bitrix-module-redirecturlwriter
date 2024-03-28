@@ -2,6 +2,9 @@
 
 namespace DigitMind\RedirectUrlWriter\Helpers;
 
+use Bitrix\Main\Application;
+use Bitrix\Main\Config\Option;
+
 class MiscHelper
 {
     public static function getModuleId()
@@ -54,6 +57,22 @@ class MiscHelper
                 'PROGRESS_VALUE' => $progressValue
             ]
         );
+    }
+
+    public static function getModuleUploadDirPath()
+    {
+        $uploadDirectoryName = Option::get('main', 'upload_dir');
+        $moduleId = GetModuleID(__FILE__);
+
+        return "/{$uploadDirectoryName}/{$moduleId}";
+    }
+
+    public static function getModuleUploadDirFullPath()
+    {
+        $documentRoot = Application::getDocumentRoot();
+        $moduleUploadDirPath = self::getModuleUploadDirPath();
+
+        return "{$documentRoot}{$moduleUploadDirPath}";
     }
 
     public static function removeGetParameters($urlString)

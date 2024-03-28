@@ -175,21 +175,16 @@ class digitmind_redirecturlwriter extends CModule
     {
         $uploadDirectoryName = Option::get('main', 'upload_dir');
 
-        $digitmindDirectoryPath = "{$documentRoot}/{$uploadDirectoryName}/digitmind";
+        $digitmindDirectoryPath = "{$documentRoot}/{$uploadDirectoryName}/{$this->MODULE_ID}";
         if (!Directory::isDirectoryExists($digitmindDirectoryPath)) {
             Directory::createDirectory($digitmindDirectoryPath);
-        }
-
-        $redirecturlwriterDirectoryPath = "{$digitmindDirectoryPath}/redirecturlwriter";
-        if (!Directory::isDirectoryExists($redirecturlwriterDirectoryPath)) {
-            Directory::createDirectory($redirecturlwriterDirectoryPath);
         }
     }
 
     private function deleteDirectories()
     {
         $uploadDirectoryPath = Option::get('main', 'upload_dir');
-        DeleteDirFilesEx("/{$uploadDirectoryPath}/digitmind/redirecturlwriter");
+        DeleteDirFilesEx("/{$uploadDirectoryPath}/{$this->MODULE_ID}");
     }
 
     function RegisterEvents()
