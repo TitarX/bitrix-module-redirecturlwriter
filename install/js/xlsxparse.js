@@ -60,6 +60,39 @@ function saveParams(url, params, waitSpinner) {
                 showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARAMS_ERROR', {}, 'work-info');
                 BX.closeWait('work-info-spinner', waitSpinner);
             } else {
+                parseXlsx(url, params, waitSpinner);
+            }
+        }
+    ).catch(
+        (error) => {
+            // console.error(error);
+            BX.closeWait('work-info-spinner', waitSpinner);
+        }
+    );
+}
+
+function parseXlsx(url, params, waitSpinner) {
+    fetch(`${url}?action=parsexlsx`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(params)
+    }).then(
+        response => response.json()
+    ).then(
+        (data) => {
+            if (data.result === 'xlsxparseerror') {
+                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PARSEXLSX_ERROR', {}, 'work-info');
+                BX.closeWait('work-info-spinner', waitSpinner);
+            } else if (data.result === 'filenotfound') {
+                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_XLSXNOTFOUND_ERROR', {}, 'work-info');
+                BX.closeWait('work-info-spinner', waitSpinner);
+            } else if (data.result === 'writeoldurlserror') {
+                showMessage(url, 'ERROR', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_WRITEOLDURLSERROR_ERROR', {}, 'work-info');
+                BX.closeWait('work-info-spinner', waitSpinner);
+            } else {
                 //
             }
         }

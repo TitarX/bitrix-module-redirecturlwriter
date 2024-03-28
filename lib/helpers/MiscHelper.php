@@ -55,4 +55,11 @@ class MiscHelper
             ]
         );
     }
+
+    public static function removeGetParameters($urlString)
+    {
+        $urlString = trim($urlString);
+        list($path) = explode('?', $urlString);
+        return $path;
+    }
 }

@@ -7,7 +7,7 @@ use Bitrix\Main\Application;
 use Bitrix\Main\IO\File;
 use DigitMind\RedirectUrlWriter\Helpers\MiscHelper;
 use DigitMind\RedirectUrlWriter\Entities\OptionsTable;
-use Shuchkin\SimpleXLSX;
+use DigitMind\RedirectUrlWriter\Workers\Parser;
 
 define('OPT_NAME_XLSX_FILE_PATH', 'XLSX_FILE_PATH');
 
@@ -113,13 +113,11 @@ if ($request->isPost()) {
         $fullFilePath = $documentRoot . $phpInput['filepath'];
         $file = new File($fullFilePath);
         if ($file->isExists() && $file->isFile()) {
-            if ($xlsx = SimpleXLSX::parse($fullFilePath)) {
+            $parseResult = Parser::parseXlsxAndWriteUrls($fullFilePath);
+            if (is_array($parseResult)) {
                 //
-            } else {
-                // $parseError =  SimpleXLSX::parseError();
-                // file_put_contents(__DIR__ . '/error.txt', print_r($parseError, true));
-
-                $result['result'] = 'xlsxparseerror';
+            } elseif (is_string($parseResult)) {
+                $result['result'] = $parseResult;
             }
         } else {
             $result['result'] = 'filenotfound';
