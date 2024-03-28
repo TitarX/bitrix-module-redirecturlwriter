@@ -22,6 +22,8 @@ $APPLICATION->SetTitle(Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PA
 $mainCss = MiscHelper::getAssetsPath('css') . '/main.css';
 Asset::getInstance()->addString('<link href="' . $mainCss . '" rel="stylesheet" type="text/css">');
 
+CJSCore::Init(['jquery']);
+
 Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/main.js');
 Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/xlsxparse.js');
 
@@ -43,7 +45,10 @@ CAdminFileDialog::ShowScript(
 );
 
 if ($request->isPost()) {
-    if ($request->get('action') === 'checkfileexists') { // Проверка на существование выбранного файла
+    $action = $request->get('action');
+    $action = trim($action);
+
+    if ($action === 'checkfileexists') { // Проверка на существование выбранного файла
         $APPLICATION->RestartBuffer();
 
         $result = ['result' => 'miss'];
@@ -63,7 +68,7 @@ if ($request->isPost()) {
         print json_encode($result);
 
         exit();
-    } elseif ($request->get('action') === 'saveparams') { // Сохранение параметров обновления
+    } elseif ($action === 'saveparams') { // Сохранение параметров обновления
         $APPLICATION->RestartBuffer();
 
         $phpInput = file_get_contents('php://input');
@@ -101,7 +106,7 @@ if ($request->isPost()) {
         print json_encode($result);
 
         exit();
-    } elseif ($request->get('action') === 'parsexlsx') { // Парсинг XLSX
+    } elseif ($action === 'parsexlsx') { // Парсинг XLSX
         $APPLICATION->RestartBuffer();
 
         $result = [];
@@ -152,6 +157,15 @@ if ($arrResult = $dbResult->fetch()) {
     }
 }
 ?>
+
+<script>
+    BX.message({
+        'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PROD_URLS_FILE':
+            '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PROD_URLS_FILE') ?>',
+        'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE':
+            '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE') ?>'
+    });
+</script>
 
 <div class="wrapper">
     <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PAGE_DESCRIPTION') ?>
