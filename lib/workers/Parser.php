@@ -129,7 +129,7 @@ class Parser
 
             $result = [
                 'free_products_urls_file_path' => $freeProductsUrlsFilePath,
-                'free_sections_urls_path' => $freeSectionsUrlsFilePath
+                'free_sections_urls_file_path' => $freeSectionsUrlsFilePath
             ];
         }
 

@@ -96,14 +96,21 @@ function parseXlsx(url, params, waitSpinner) {
                 showMessage(url, 'OK', 'DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SUCCESS', {}, 'work-info');
 
                 if (data.result.free_products_urls_file_path) {
-                    jQuery('<div class="wrapper">' + '<a href="' + data.result.free_products_urls_file_path + '" download>'
+                    let freeProductLink = jQuery('#free-product-link');
+                    freeProductLink.empty();
+
+                    jQuery('<a href="' + data.result.free_products_urls_file_path + '" download>'
                         + BX.message('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PROD_URLS_FILE')
-                        + '</a></div>').appendTo(jQuery('#work-info'));
+                        + '</a>').appendTo(freeProductLink);
                 }
-                if (data.result.free_sections_urls_path) {
-                    jQuery('<div class="wrapper">' + '<a href="' + data.result.free_sections_urls_path + '" download>'
+
+                if (data.result.free_sections_urls_file_path) {
+                    let freeSectionLink = jQuery('#free-section-link');
+                    freeSectionLink.empty();
+
+                    jQuery('<a href="' + data.result.free_sections_urls_file_path + '" download>'
                         + BX.message('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE')
-                        + '</a></div>').appendTo(jQuery('#work-info'));
+                        + '</a>').appendTo(freeSectionLink);
                 }
 
                 BX.closeWait('work-info-spinner', waitSpinner);

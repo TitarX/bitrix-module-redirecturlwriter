@@ -10,6 +10,8 @@ use DigitMind\RedirectUrlWriter\Entities\OptionsTable;
 use DigitMind\RedirectUrlWriter\Workers\Parser;
 
 define('OPT_NAME_XLSX_FILE_PATH', 'XLSX_FILE_PATH');
+define('OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH', 'FREE_PRODUCTS_URLS_FILE_PATH');
+define('OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH', 'FREE_SECTIONS_URLS_FILE_PATH');
 
 Loc::loadMessages(__FILE__);
 Loader::includeModule('digitmind.redirecturlwriter');
@@ -28,6 +30,7 @@ Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/main.js');
 Asset::getInstance()->addJs(MiscHelper::getAssetsPath('js') . '/xlsxparse.js');
 
 $request = Application::getInstance()->getContext()->getRequest();
+$options = OptionsTable::getData();
 
 CAdminFileDialog::ShowScript(
     [
@@ -81,19 +84,9 @@ if ($request->isPost()) {
                 'VALUE' => $phpInput['filepath']
             ];
 
-            $entryId = 0;
-            $dbResult = OptionsTable::getList([
-                'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH],
-                'select' => ['ID'],
-                'limit' => 1
-            ]);
-            if ($arrResult = $dbResult->fetch()) {
-                $entryId = $arrResult['ID'];
-            }
-
             $workResult = null;
-            if (!empty($entryId)) {
-                $workResult = OptionsTable::update($entryId, $arrParams);
+            if (!empty($options[OPT_NAME_XLSX_FILE_PATH]['ID'])) {
+                $workResult = OptionsTable::update($options[OPT_NAME_XLSX_FILE_PATH]['ID'], $arrParams);
             } else {
                 $workResult = OptionsTable::add($arrParams);
             }
@@ -119,6 +112,30 @@ if ($request->isPost()) {
         $file = new File($fullFilePath);
         if ($file->isExists() && $file->isFile()) {
             $result['result'] = Parser::parseXlsxAndWriteUrls($fullFilePath);
+
+            if (!empty($result['result']['free_products_urls_file_path'])) {
+                $arrParams = [
+                    'CODE' => OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH,
+                    'VALUE' => $result['result']['free_products_urls_file_path']
+                ];
+                if (!empty($options[OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH]['ID'])) {
+                    OptionsTable::update($options[OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH]['ID'], $arrParams);
+                } else {
+                    OptionsTable::add($arrParams);
+                }
+            }
+
+            if (!empty($result['result']['free_sections_urls_file_path'])) {
+                $arrParams = [
+                    'CODE' => OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH,
+                    'VALUE' => $result['result']['free_sections_urls_file_path']
+                ];
+                if (!empty($options[OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH]['ID'])) {
+                    OptionsTable::update($options[OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH]['ID'], $arrParams);
+                } else {
+                    OptionsTable::add($arrParams);
+                }
+            }
         } else {
             $result['result'] = 'filenotfound';
         }
@@ -144,17 +161,9 @@ if ($request->isPost()) {
 }
 
 $filePath = '';
-$dbResult = OptionsTable::getList(
-    [
-        'filter' => ['CODE' => OPT_NAME_XLSX_FILE_PATH],
-        'select' => ['VALUE'],
-        'limit' => 1
-    ]
-);
-if ($arrResult = $dbResult->fetch()) {
-    if (!empty($arrResult['VALUE'])) {
-        $filePath = $arrResult['VALUE'];
-    }
+$options = OptionsTable::getData();
+if (!empty($options[OPT_NAME_XLSX_FILE_PATH]['VALUE'])) {
+    $filePath = $options[OPT_NAME_XLSX_FILE_PATH]['VALUE'];
 }
 ?>
 
@@ -190,4 +199,18 @@ if ($arrResult = $dbResult->fetch()) {
 
 <div class="wrapper">
     <div id="work-info"></div>
+    <div id="free-product-link">
+        <?php if (!empty($options[OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH]['VALUE'])): ?>
+            <a href="<?= $options[OPT_NAME_FREE_PRODUCTS_URLS_FILE_PATH]['VALUE'] ?>" download>
+                <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_PROD_URLS_FILE') ?>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div id="free-section-link">
+        <?php if (!empty($options[OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH]['VALUE'])): ?>
+            <a href="<?= $options[OPT_NAME_FREE_SECTIONS_URLS_FILE_PATH]['VALUE'] ?>" download>
+                <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_XLSXPARSE_SECT_URLS_FILE') ?>
+            </a>
+        <?php endif; ?>
+    </div>
 </div>

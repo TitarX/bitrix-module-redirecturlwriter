@@ -2,7 +2,9 @@
 
 namespace DigitMind\RedirectUrlWriter\Entities;
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Entity;
+use Bitrix\Main\ObjectPropertyException;
 use Bitrix\Main\SystemException;
 
 class OptionsTable extends Entity\DataManager
@@ -53,5 +55,29 @@ class OptionsTable extends Entity\DataManager
                 ]
             )
         ];
+    }
+
+    /**
+     * @return array
+     *
+     * @throws SystemException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     */
+    public static function getData(): array
+    {
+        $result = [];
+
+        $dbResult = OptionsTable::getList([
+            'select' => ['ID', 'CODE', 'VALUE']
+        ]);
+        while ($arrResult = $dbResult->fetch()) {
+            $result[$arrResult['CODE']] = [
+                'ID' => $arrResult['ID'],
+                'VALUE' => $arrResult['VALUE']
+            ];
+        }
+
+        return $result;
     }
 }
