@@ -45,12 +45,12 @@ class Parser
                 if (preg_match(self::PRODUCT_URL_FEATURE_PATTERN, $row[self::URL_COL_INDEX], $matches) === 1) {
                     if (!empty($matches[1]) && empty($productUrls['products'][$matches[1]])) {
                         $productUrls['products'][$matches[1]] =
-                            MiscHelper::removeGetParameters($row[self::URL_COL_INDEX]);
+                            parse_url($row[self::URL_COL_INDEX], PHP_URL_PATH);
                     }
                 } elseif (preg_match(self::SECTION_URL_FEATURE_PATTERN, $row[self::URL_COL_INDEX], $matches) === 1) {
                     if (!empty($matches[1]) && empty($productUrls['sections'][$matches[1]])) {
                         $productUrls['sections'][$matches[1]] =
-                            MiscHelper::removeGetParameters($row[self::URL_COL_INDEX]);
+                            parse_url($row[self::URL_COL_INDEX], PHP_URL_PATH);
                     }
                 }
             }
@@ -87,13 +87,13 @@ class Parser
                 ['IBLOCK_ID', 'ID']
             );
             while ($arrResult = $dbResult->Fetch()) {
-                // \CIBlockElement::SetPropertyValuesEx(
-                //     $arrResult['ID'],
-                //     self::IBLOCK_ID,
-                //     [
-                //         'PRODUCT_OLD_URL' => $oldUrls['products'][$arrResult['ID']]
-                //     ]
-                // );
+                \CIBlockElement::SetPropertyValuesEx(
+                    $arrResult['ID'],
+                    self::IBLOCK_ID,
+                    [
+                        'PRODUCT_OLD_URL' => $oldUrls['products'][$arrResult['ID']]
+                    ]
+                );
 
                 unset($oldUrls['products'][$arrResult['ID']]);
             }
@@ -114,11 +114,11 @@ class Parser
                 false
             );
             while ($arrResult = $dbResult->Fetch()) {
-                // $USER_FIELD_MANAGER->Update(
-                //     'IBLOCK_4_SECTION',
-                //     $arrResult['ID'],
-                //     ['UF_SECTION_OLD_URL' => $oldUrls['sections'][$arrResult['ID']]]
-                // );
+                $USER_FIELD_MANAGER->Update(
+                    'IBLOCK_' . self::IBLOCK_ID . '_SECTION',
+                    $arrResult['ID'],
+                    ['UF_SECTION_OLD_URL' => $oldUrls['sections'][$arrResult['ID']]]
+                );
 
                 unset($oldUrls['sections'][$arrResult['ID']]);
             }
