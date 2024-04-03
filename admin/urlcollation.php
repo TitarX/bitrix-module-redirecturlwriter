@@ -13,6 +13,7 @@ use DigitMind\RedirectUrlWriter\Workers\Collator;
 define('OPT_NAME_CSV_FILE_PATH', 'CSV_FILE_PATH');
 define('OPT_NAME_PRODUCTS_WITHOUT_OLD_URLS_FILE_PATH', 'PRODUCTS_WITHOUT_OLD_URLS_FILE_PATH');
 define('OPT_NAME_SECTIONS_WITHOUT_OLD_URLS_FILE_PATH', 'SECTIONS_WITHOUT_OLD_URLS_FILE_PATH');
+define('OPT_NAME_BAD_URLS_FILE_PATH', 'BAD_URLS_FILE_PATH');
 
 Loc::loadMessages(__FILE__);
 Loader::includeModule('digitmind.redirecturlwriter');
@@ -133,6 +134,18 @@ if ($request->isPost()) {
                     OptionsTable::add($arrParams);
                 }
             }
+
+            if (!empty($result['result']['bad_urls_file_path'])) {
+                $arrParams = [
+                    'CODE' => OPT_NAME_BAD_URLS_FILE_PATH,
+                    'VALUE' => $result['result']['bad_urls_file_path']
+                ];
+                if (!empty($options[OPT_NAME_BAD_URLS_FILE_PATH]['ID'])) {
+                    OptionsTable::update($options[OPT_NAME_BAD_URLS_FILE_PATH]['ID'], $arrParams);
+                } else {
+                    OptionsTable::add($arrParams);
+                }
+            }
         }
 
         print json_encode($result);
@@ -167,7 +180,9 @@ if (!empty($options[OPT_NAME_CSV_FILE_PATH]['VALUE'])) {
         'DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_PROD_URLS_FILE':
             '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_PROD_URLS_FILE') ?>',
         'DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_SECT_URLS_FILE':
-            '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_SECT_URLS_FILE') ?>'
+            '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_SECT_URLS_FILE') ?>',
+        'DIGITMIND_REDIRECTURLWRITER_BAD_URLS_FILE':
+            '<?= GetMessageJS('DIGITMIND_REDIRECTURLWRITER_BAD_URLS_FILE') ?>'
     });
 </script>
 
@@ -205,6 +220,13 @@ if (!empty($options[OPT_NAME_CSV_FILE_PATH]['VALUE'])) {
         <?php if (!empty($options[OPT_NAME_SECTIONS_WITHOUT_OLD_URLS_FILE_PATH]['VALUE'])): ?>
             <a href="<?= $options[OPT_NAME_SECTIONS_WITHOUT_OLD_URLS_FILE_PATH]['VALUE'] ?>" download>
                 <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_URLCOLLATION_SECT_URLS_FILE') ?>
+            </a>
+        <?php endif; ?>
+    </div>
+    <div id="bad-url">
+        <?php if (!empty($options[OPT_NAME_BAD_URLS_FILE_PATH]['VALUE'])): ?>
+            <a href="<?= $options[OPT_NAME_BAD_URLS_FILE_PATH]['VALUE'] ?>" download>
+                <?= Loc::getMessage('DIGITMIND_REDIRECTURLWRITER_BAD_URLS_FILE') ?>
             </a>
         <?php endif; ?>
     </div>

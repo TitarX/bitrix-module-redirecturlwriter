@@ -128,6 +128,15 @@ function collateUrl(url, params, waitSpinner) {
                         + '</a>').appendTo(sectionWithoutOldUrl);
                 }
 
+                if (data.result.bad_urls_file_path) {
+                    let badUrl = jQuery('#bad-url');
+                    badUrl.empty();
+
+                    jQuery('<a href="' + data.result.bad_urls_file_path + '" download>'
+                        + BX.message('DIGITMIND_REDIRECTURLWRITER_BAD_URLS_FILE')
+                        + '</a>').appendTo(badUrl);
+                }
+
                 BX.closeWait('work-info-spinner', waitSpinner);
             }
         }

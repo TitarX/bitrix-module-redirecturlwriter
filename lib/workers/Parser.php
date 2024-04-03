@@ -10,6 +10,8 @@ use Shuchkin\SimpleXLSX;
 class Parser
 {
     private const IBLOCK_ID = 4;
+    private const PROPERTY_NAME_PRODUCT_OLD_URL = 'PRODUCT_OLD_URL';
+    private const UF_NAME_SECTION_OLD_URL = 'UF_SECTION_OLD_URL';
     private const URL_COL_INDEX = 1;
     private const PRODUCT_URL_FEATURE_PATTERN = '|/products/\d+/(\d+)|uis';
     private const SECTION_URL_FEATURE_PATTERN = '|/products/(\d+)|uis';
@@ -91,7 +93,7 @@ class Parser
                     $arrResult['ID'],
                     self::IBLOCK_ID,
                     [
-                        'PRODUCT_OLD_URL' => $oldUrls['products'][$arrResult['ID']]
+                        self::PROPERTY_NAME_PRODUCT_OLD_URL => $oldUrls['products'][$arrResult['ID']]
                     ]
                 );
 
@@ -117,7 +119,7 @@ class Parser
                 $USER_FIELD_MANAGER->Update(
                     'IBLOCK_' . self::IBLOCK_ID . '_SECTION',
                     $arrResult['ID'],
-                    ['UF_SECTION_OLD_URL' => $oldUrls['sections'][$arrResult['ID']]]
+                    [self::UF_NAME_SECTION_OLD_URL => $oldUrls['sections'][$arrResult['ID']]]
                 );
 
                 unset($oldUrls['sections'][$arrResult['ID']]);
