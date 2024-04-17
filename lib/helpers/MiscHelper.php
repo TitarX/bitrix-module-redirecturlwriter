@@ -162,4 +162,15 @@ class MiscHelper
 
         return $result;
     }
+
+    public static function checkFirstSlash($text)
+    {
+        if (!empty($text)) {
+            if (preg_match('/^(?:(http:\/\/)|(https:\/\/)|(\/))/ui', $text) !== 1) {
+                $text = "/$text";
+            }
+        }
+
+        return $text;
+    }
 }

@@ -123,8 +123,10 @@ class Collator
                 if (!empty($arrFields['PROPERTY_' . self::PROPERTY_NAME_PRODUCT_OLD_URL . '_VALUE'])) {
                     if ($arrFields['PROPERTY_' . self::PROPERTY_NAME_PRODUCT_OLD_URL . '_VALUE'] != $arrFields['DETAIL_PAGE_URL']) {
                         $arrCsvStrings[] = [
-                            $arrFields['PROPERTY_' . self::PROPERTY_NAME_PRODUCT_OLD_URL . '_VALUE'],
-                            $arrFields['DETAIL_PAGE_URL'],
+                            MiscHelper::checkFirstSlash(
+                                $arrFields['PROPERTY_' . self::PROPERTY_NAME_PRODUCT_OLD_URL . '_VALUE']
+                            ),
+                            MiscHelper::checkFirstSlash($arrFields['DETAIL_PAGE_URL']),
                             '301'
                         ];
                     }
@@ -197,8 +199,8 @@ class Collator
                 if (!empty($arrFields[self::UF_NAME_SECTION_OLD_URL])) {
                     if ($arrFields[self::UF_NAME_SECTION_OLD_URL] != $arrFields['SECTION_PAGE_URL']) {
                         $arrCsvStrings[] = [
-                            $arrFields[self::UF_NAME_SECTION_OLD_URL],
-                            $arrFields['SECTION_PAGE_URL'],
+                            MiscHelper::checkFirstSlash($arrFields[self::UF_NAME_SECTION_OLD_URL]),
+                            MiscHelper::checkFirstSlash($arrFields['SECTION_PAGE_URL']),
                             '301'
                         ];
                     }
